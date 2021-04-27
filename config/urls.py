@@ -7,3 +7,4 @@ urlpatterns = [
     path('api/card/', include('card_maker.urls', namespace='card_maker')),
 
 ]
+   
