@@ -56,9 +56,11 @@ class LoginSerializer(serializers.Serializer):
             'token' : token[0]
         }
 
-    class Meta:
-        model = User
-        fields = ['username', 'password']
-        extra_kwargs = {"password": {"write_only": True}}
-    
+    # class Meta:
+    #     model = User
+    #     fields = ['username', 'password']
+    #     extra_kwargs = {"password": {"write_only": True}}
+
+
+
 
