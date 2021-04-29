@@ -40,15 +40,22 @@ class LoginSerializer(serializers.Serializer):
         username = data.get("username", None)
         password = data.get("password", None)
 
-        user = authenticate(username=username, password=password)
 
+        user = authenticate(username=username, password=password)
+        print(user)
         if user is None:
-            return {
-                'msg': 'check your username or password'
+            msg = {
+                'msg': 'check your username or password',
+                "format":{
+                    "username": "char / length=64",
+                    "password": "char / length=128"
+                }
             }
+            raise serializers.ValidationError(msg)
+            
 
         token =  Token.objects.get_or_create(user=user)
- 
+
 
         return {
             'email': user.email,

@@ -25,17 +25,13 @@ class Registration_view(APIView):
 
 class Login_View(APIView):
     def post(self, request):
-       
         serializer = LoginSerializer(data=request.data)
 
-      
+
         if serializer.is_valid():
             return Response(serializer.data ,status=status.HTTP_200_OK)
        
-        msg = {
-            "msg": "login error"
-        }
-        return Response(msg,status= status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
 
 class Logout_View(APIView):
     def post(self, request):
@@ -82,7 +78,7 @@ class KakaoToken_View(APIView):
 
         user_response = requests.post(url=KAKAO_USER_URL,headers=header).json()
 
-        if user_response:
+        # if user_response:
         #     ID = response.get('id')
         #     KAKAO_ACCOUNT = response.get('kakao_account')
         #     NICNAME = KAKAO_ACCOUNT.get('nickname')
