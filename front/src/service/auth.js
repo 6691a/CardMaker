@@ -9,10 +9,6 @@ class AuthService {
         this.TOKEN_DAY = 1;
         this.USER_COOKIE_NAME = 'uTK';
 
-        this.kakao = new Kakao(KAKAO_JS_KEY);
-      
-       
-        
         this.axios = axios.create({
             baseURL : BASE_URL + '/users',
             //params: {},
@@ -22,6 +18,8 @@ class AuthService {
                 'Token ' + this.utility.getCookie(this.USER_COOKIE_NAME) : null
             },
         })
+
+        this.kakao = new Kakao(KAKAO_JS_KEY, this.axios);
         
     }
 
@@ -47,7 +45,7 @@ class AuthService {
 
     }
 
-    async getUser() {     
+    async findUser() {     
         const response = await this.axios.post('/',{
         })
         return response.data    
@@ -57,7 +55,8 @@ class AuthService {
 }
 
 class Kakao{
-    constructor(key){
+    constructor(key, axios){
+        this.axios = axios
         this.kakaoScript = document.createElement("script");
         this.kakaoScript.src = "https://developers.kakao.com/sdk/js/kakao.js";
         document.head.appendChild(this.kakaoScript);
@@ -71,21 +70,9 @@ class Kakao{
     async login() {
         this.get_access_token()
         const user = await this.get_user();
-        console.log(user)
-        
-        // window.Kakao.Auth.login({
-        //     scope: 'profile, account_email',
-        //     success: (response) => {
-        //         const token = response.access_token
-        //         this.get_user(token)
-        //         .then((result)=>{
-        //             return result;           
-        //         })               
-        //     },
-        //     fail: (err) => {
-        //         alert(JSON.stringify(err))
-        //     },
-        // })
+        this.djang_login(user);
+
+
 
     }
 
@@ -113,10 +100,16 @@ class Kakao{
             },
 
         })
-        // console.log('kakao user', user)
         return user
     }
     
+    djang_login(user) {
+
+        const response = this.axios.post('kakao/login/',{
+            username: user.kakao_account.email,
+            password: user.id
+        })
+    }
 
 
 

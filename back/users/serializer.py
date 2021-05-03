@@ -11,7 +11,7 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['username', 'email']
         # extra_kwargs = {
         #     "username": {"read_only": True},
-        #     "email": {"read_only": True},
+        #     "emaiail": {"read_only": True},
         # }
 
 
@@ -38,7 +38,22 @@ class RegisterUserSerializer(serializers.ModelSerializer):
         user.save()
         return user
 
+class KakaoRegisterUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username','email','password']
+        extra_kwargs = {"password": {"write_only": True}}
 
+    def create(self, validated_data):
+        password = self.validated_data['password']
+        user = User.objects.create(
+            email = self.validated_data['username'],
+            username = self.validated_data['username']
+        )
+        
+        user.set_password(password)
+        user.save()
+        return user
 
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=64)

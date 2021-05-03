@@ -37,7 +37,7 @@ const Login = ({authService}) => {
     };
 
     useEffect(() => {
-         authService.getUser()
+         authService.findUser()
          .then((user)=>{
             //console.log(user);
             goToHome(user);

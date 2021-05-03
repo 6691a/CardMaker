@@ -9,9 +9,9 @@ from rest_framework.authtoken.models import Token
 
 from rest_framework.permissions import IsAuthenticated  
 
-from .serializer import RegisterUserSerializer, UserSerializer, LoginSerializer
+from .serializer import RegisterUserSerializer, UserSerializer, LoginSerializer, KakaoRegisterUserSerializer
 
-class GetUser_View(APIView):
+class FindUser_View(APIView):
     permission_classes = [IsAuthenticated]
     
     def post(self, request):
@@ -27,9 +27,6 @@ class GetUser_View(APIView):
 
         
         
-
-
-
 class Registration_View(APIView):
     permission_classes = [AllowAny]
 
@@ -45,6 +42,7 @@ class Registration_View(APIView):
 class Login_View(APIView):
     permission_classes = [AllowAny]
     def post(self, request):
+        print(request)
         serializer = LoginSerializer(data=request.data)
 
 
@@ -55,22 +53,36 @@ class Login_View(APIView):
 
 class Logout_View(APIView):
     permission_classes = [AllowAny]
+
     def post(self, request):
         request.user.auth_token.delete()
         return Response({' msg':'삭제'},status=status.HTTP_200_OK)
         
 class KakaoLogin_View(APIView):
     permission_classes = [AllowAny]
-    def get(self, request):
-        REST_API_KEY = settings.KAKAO_REST_KEY
-        REDIRECT_URI = 'http://localhost:8000/api/users/kakao/login/token/'
 
-        # REDIRECT_URI = "http://127.0.0.1:8000/api/users/kakao/login/callback/"
-        return Response({'kakao':f'https://kauth.kakao.com/oauth/authorize?client_id={REST_API_KEY}&redirect_uri={REDIRECT_URI}&response_type=code'},status=status.HTTP_200_OK)
+    def post(self, request):
+        print(request.data)
+
+        serializer = KakaoRegisterUserSerializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+
+        token = Login_View.as_view()(request._request)
+       
+        return Response(status= status.HTTP_400_BAD_REQUEST)
+
+    # def get(self, request):
+    #     REST_API_KEY = settings.KAKAO_REST_KEY
+    #     REDIRECT_URI = 'http://localhost:8000/api/users/kakao/login/token/'
+
+    #     # REDIRECT_URI = "http://127.0.0.1:8000/api/users/kakao/login/callback/"
+    #     return Response({'kakao':f'https://kauth.kakao.com/oauth/authorize?client_id={REST_API_KEY}&redirect_uri={REDIRECT_URI}&response_type=code'},status=status.HTTP_200_OK)
         
-        # return redirect(
-        #     f"https://kauth.kakao.com/oauth/authorize?client_id={REST_API_KEY}&redirect_uri={REDIRECT_URI}&response_type=code"
-        # )
+    #     # return redirect(
+    #     #     f"https://kauth.kakao.com/oauth/authorize?client_id={REST_API_KEY}&redirect_uri={REDIRECT_URI}&response_type=code"
+    #     # )
       
 class KakaoToken_View(APIView):
     permission_classes = [AllowAny]
