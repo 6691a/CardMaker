@@ -68,39 +68,53 @@ class Kakao{
     }
 
 
-    login() {
-
-        window.Kakao.Auth.login({
-            scope: 'profile, account_email',
-            success: (response) => {
-                const token = response.access_token
-                this.get_user(token)
-                .then((result)=>{
-                    return result;           
-                })               
-            },
-            fail: (err) => {
-                alert(JSON.stringify(err))
-            },
-        })
+    async login() {
+        this.get_access_token()
+        const user = await this.get_user();
+        console.log(user)
+        
+        // window.Kakao.Auth.login({
+        //     scope: 'profile, account_email',
+        //     success: (response) => {
+        //         const token = response.access_token
+        //         this.get_user(token)
+        //         .then((result)=>{
+        //             return result;           
+        //         })               
+        //     },
+        //     fail: (err) => {
+        //         alert(JSON.stringify(err))
+        //     },
+        // })
 
     }
 
-    async get_user(token) {
-        let result;
+    get_access_token(){
+        window.Kakao.Auth.login({
+            scope: 'profile, account_email',
+            success: (response) => {
+            
+            },
+            fail: (err) => {
+
+            },
+        })
+    }
+
+    async get_user() {
+        let user;
         await window.Kakao.API.request({
             url: '/v2/user/me',
             success: function(response) {
-                const account = response.kakao_account
-                result = response;
+                user = response;
             },
             fail: (err) => {
                 alert(JSON.stringify(err))
-                result = null
             },
 
         })
-        return result
+        // console.log('kakao user', user)
+        return user
     }
     
 
