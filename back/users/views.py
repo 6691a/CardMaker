@@ -5,13 +5,32 @@ from rest_framework import status
 from rest_framework.response import Response
 from django.conf import settings
 from django.shortcuts import redirect 
+from rest_framework.authtoken.models import Token
 
 from rest_framework.permissions import IsAuthenticated  
 
 from .serializer import RegisterUserSerializer, UserSerializer, LoginSerializer
 
+class GetUser_View(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def post(self, request):
+        print(request.auth.key)
+        user = Token.objects.get(key=request.auth.key).user
 
-class Registration_view(APIView):
+        serializer = UserSerializer(instance=user)
+
+        if serializer:
+            return Response(serializer.data ,status=status.HTTP_200_OK)
+
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+
+        
+        
+
+
+
+class Registration_View(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
@@ -24,6 +43,7 @@ class Registration_view(APIView):
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
 class Login_View(APIView):
+    permission_classes = [AllowAny]
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
 
@@ -34,11 +54,13 @@ class Login_View(APIView):
         return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
 
 class Logout_View(APIView):
+    permission_classes = [AllowAny]
     def post(self, request):
         request.user.auth_token.delete()
         return Response({' msg':'삭제'},status=status.HTTP_200_OK)
         
 class KakaoLogin_View(APIView):
+    permission_classes = [AllowAny]
     def get(self, request):
         REST_API_KEY = settings.KAKAO_REST_KEY
         REDIRECT_URI = 'http://localhost:8000/api/users/kakao/login/token/'
@@ -51,6 +73,7 @@ class KakaoLogin_View(APIView):
         # )
       
 class KakaoToken_View(APIView):
+    permission_classes = [AllowAny]
     def get(self, request):
         REST_API_KEY = settings.KAKAO_REST_KEY
         REDIRECT_URI = 'http://localhost:8000/api/users/kakao/login/token/'

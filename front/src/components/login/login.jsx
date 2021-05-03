@@ -1,8 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect  } from 'react';
+import { useHistory } from 'react-router';
 import Footer from '../footer/footer';
 import Header from '../header/header';
+import { useCookies } from 'react-cookie';
+import styles from './login.module.css';
 
 const Login = ({authService}) => {
+    const [cookies, setCookie, removeCookie] = useCookies(['uTK']);
+    
+    const history = useHistory();
+
+    const [user, setUser] = useState();
 
     const initFormData = Object.freeze({
         username: '',
@@ -10,9 +18,36 @@ const Login = ({authService}) => {
     });
     const [formData, setFormData] = useState(initFormData);
 
+    const goToHome = (user) => {
+        history.push({
+            pathname: '/maker',
+            state: {
+                user: user,
+            },
+        });
+    }
+
+
     const onLogin = (event) => {
-        authService.login(formData);
+        authService.login(formData)
+        .then((user)=>{
+            console.log(user)
+            goToHome(user);
+        })
     };
+
+    useEffect(() => {
+         authService.getUser()
+         .then((user)=>{
+            //console.log(user);
+            goToHome(user);
+         })
+        .catch((error)=>{
+            console.log('getUser Error');
+        }); 
+         
+         
+    });
 
     const onFomeChange = (event) => {
         setFormData({
@@ -20,6 +55,13 @@ const Login = ({authService}) => {
             [event.target.name]: event.target.value.trim()
         });
     };
+
+    const kakaoLogin= () => {
+        authService.kakao.login()
+        // authService.kakao.login()
+        // data = authService.kakao.login()
+        // console.log(data)
+    }
 
 
 
@@ -40,7 +82,9 @@ const Login = ({authService}) => {
                         <button onClick={onLogin}>로그인</button>
                     </li>
                     <li>
-                        <button>Kakao</button>
+                        <a onClick={kakaoLogin}>
+                            <img src="//k.kakaocdn.net/14/dn/btqCn0WEmI3/nijroPfbpCa4at5EIsjyf0/o.jpg" alt="" width="222"/>
+                        </a>
                     </li>
                 </ui>
             </section>

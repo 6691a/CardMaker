@@ -3,6 +3,19 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
 
+
+class UserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ['username', 'email']
+        # extra_kwargs = {
+        #     "username": {"read_only": True},
+        #     "email": {"read_only": True},
+        # }
+
+
+
 class RegisterUserSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(style={'input_type':'password'}, write_only=True)
 
@@ -25,10 +38,7 @@ class RegisterUserSerializer(serializers.ModelSerializer):
         user.save()
         return user
 
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['username', 'email']
+
 
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=64)
@@ -62,11 +72,6 @@ class LoginSerializer(serializers.Serializer):
             'username': username,
             'token' : token[0]
         }
-
-    # class Meta:
-    #     model = User
-    #     fields = ['username', 'password']
-    #     extra_kwargs = {"password": {"write_only": True}}
 
 
 

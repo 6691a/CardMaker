@@ -1,0 +1,10 @@
+img {
+    -webkit-user-drag: none;
+}
+button {
+    outline: 0;
+}
+
+a {
+ cursor: pointer;
+}
