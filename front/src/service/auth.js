@@ -19,8 +19,7 @@ class AuthService {
             },
         })
 
-        this.kakao = new Kakao(KAKAO_JS_KEY, this.axios);
-        
+        this.kakao = new Kakao(KAKAO_JS_KEY, this.axios, this.utility);
     }
 
     async login(formData) {
@@ -48,6 +47,7 @@ class AuthService {
     async findUser() {     
         const response = await this.axios.post('/',{
         })
+       
         return response.data    
     }
 
@@ -55,8 +55,9 @@ class AuthService {
 }
 
 class Kakao{
-    constructor(key, axios){
-        this.axios = axios
+    constructor(key, axios, utility){
+        this.utility = utility;
+        this.axios = axios;
         this.kakaoScript = document.createElement("script");
         this.kakaoScript.src = "https://developers.kakao.com/sdk/js/kakao.js";
         document.head.appendChild(this.kakaoScript);
@@ -70,9 +71,10 @@ class Kakao{
     async login() {
         this.get_access_token()
         const user = await this.get_user();
-        this.djang_login(user);
 
-
+        const data = await this.djang_login(user);
+       
+        console.log(data)
 
     }
 
@@ -103,16 +105,13 @@ class Kakao{
         return user
     }
     
-    djang_login(user) {
-
-        const response = this.axios.post('kakao/login/',{
+    async djang_login(user) {
+        const response = await this.axios.post('kakao/login/',{
             username: user.kakao_account.email,
             password: user.id
         })
+        return response.data
     }
-
-
-
 }
 
 

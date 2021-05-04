@@ -67,7 +67,6 @@ class LoginSerializer(serializers.Serializer):
 
 
         user = authenticate(username=username, password=password)
-        print(user)
         if user is None:
             msg = {
                 'msg': 'check your username or password',

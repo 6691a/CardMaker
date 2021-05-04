@@ -57,7 +57,9 @@ const Login = ({authService}) => {
     };
 
     const kakaoLogin= () => {
-        authService.kakao.login()
+        authService.kakao.login().then(
+            console.log
+        )
         // authService.kakao.login()
         // data = authService.kakao.login()
         // console.log(data)

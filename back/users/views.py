@@ -15,7 +15,7 @@ class FindUser_View(APIView):
     permission_classes = [IsAuthenticated]
     
     def post(self, request):
-        print(request.auth.key)
+
         user = Token.objects.get(key=request.auth.key).user
 
         serializer = UserSerializer(instance=user)
@@ -42,12 +42,10 @@ class Registration_View(APIView):
 class Login_View(APIView):
     permission_classes = [AllowAny]
     def post(self, request):
-        print(request)
         serializer = LoginSerializer(data=request.data)
 
-
         if serializer.is_valid():
-            return Response(serializer.data ,status=status.HTTP_200_OK)
+            return Response(serializer.data, status=status.HTTP_200_OK)
        
         return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
 
@@ -62,16 +60,15 @@ class KakaoLogin_View(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        print(request.data)
-
         serializer = KakaoRegisterUserSerializer(data=request.data)
 
         if serializer.is_valid():
             serializer.save()
 
-        token = Login_View.as_view()(request._request)
-       
-        return Response(status= status.HTTP_400_BAD_REQUEST)
+
+        return Login_View.post(self, request)
+      
+
 
     # def get(self, request):
     #     REST_API_KEY = settings.KAKAO_REST_KEY
