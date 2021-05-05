@@ -17,7 +17,7 @@ function App( {authService} ) {
           </Route>
 
           <Route path="/maker">
-            <Maker/>
+            <Maker authService={authService}/>
           </Route>
           
         </Switch>

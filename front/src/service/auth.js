@@ -3,23 +3,24 @@ import BASE_URL from '../utility/urls';
 import Utility from '../utility/utility';
 import {KAKAO_JS_KEY} from '../utility/keys'; 
 
+const TOKEN_DAY = 1;
+const USER_COOKIE_NAME = 'uTK';
+const utility = new Utility();
+
 class AuthService {
     constructor() {
-        this.utility = new Utility();
-        this.TOKEN_DAY = 1;
-        this.USER_COOKIE_NAME = 'uTK';
-
+        
         this.axios = axios.create({
             baseURL : BASE_URL + '/users',
             //params: {},
             
             headers: {
-                Authorization: this.utility.getCookie(this.USER_COOKIE_NAME) ?
-                'Token ' + this.utility.getCookie(this.USER_COOKIE_NAME) : null
+                Authorization: utility.getCookie(USER_COOKIE_NAME) ?
+                'Token ' + utility.getCookie(USER_COOKIE_NAME) : null
             },
         })
 
-        this.kakao = new Kakao(KAKAO_JS_KEY, this.axios, this.utility);
+        this.kakao = new Kakao(KAKAO_JS_KEY, this.axios);
     }
 
     async login(formData) {
@@ -30,7 +31,7 @@ class AuthService {
         })
 
         if(response) {
-            this.utility.setCookie(this.USER_COOKIE_NAME, response.data.token, this.TOKEN_DAY)
+            utility.setCookie(USER_COOKIE_NAME, response.data.token, TOKEN_DAY)
             delete response.data.token
             return response.data
         }
@@ -41,22 +42,21 @@ class AuthService {
     }
 
     async logout() {
-
+        utility.deleteCookie(USER_COOKIE_NAME);
     }
 
-    async findUser() {     
-        const response = await this.axios.post('/',{
-        })
-       
-        return response.data    
+    async findUser() {
+        if(utility.getCookie(USER_COOKIE_NAME)){
+            const response = await this.axios.post('/',{
+
+            })
+            return response.data 
+        }
     }
-
-
 }
 
 class Kakao{
-    constructor(key, axios, utility){
-        this.utility = utility;
+    constructor(key, axios){
         this.axios = axios;
         this.kakaoScript = document.createElement("script");
         this.kakaoScript.src = "https://developers.kakao.com/sdk/js/kakao.js";
@@ -69,25 +69,28 @@ class Kakao{
 
 
     async login() {
-        this.get_access_token()
+        const token = await this.get_access_token()
+
         const user = await this.get_user();
 
         const data = await this.djang_login(user);
-       
-        console.log(data)
 
+
+        return data;
     }
 
-    get_access_token(){
-        window.Kakao.Auth.login({
+    async get_access_token(){
+        let token;
+        await window.Kakao.Auth.login({
             scope: 'profile, account_email',
             success: (response) => {
-            
+                token = response;
             },
             fail: (err) => {
 
             },
         })
+        return token
     }
 
     async get_user() {
@@ -110,7 +113,13 @@ class Kakao{
             username: user.kakao_account.email,
             password: user.id
         })
-        return response.data
+
+        if(response) {
+            utility.setCookie(USER_COOKIE_NAME, response.data.token, TOKEN_DAY)
+            delete response.data.token
+
+            return response.data
+        }
     }
 }
 

@@ -6,11 +6,11 @@ import { useCookies } from 'react-cookie';
 import styles from './login.module.css';
 
 const Login = ({authService}) => {
-    const [cookies, setCookie, removeCookie] = useCookies(['uTK']);
+  
     
     const history = useHistory();
 
-    const [user, setUser] = useState();
+
 
     const initFormData = Object.freeze({
         username: '',
@@ -31,23 +31,9 @@ const Login = ({authService}) => {
     const onLogin = (event) => {
         authService.login(formData)
         .then((user)=>{
-            console.log(user)
             goToHome(user);
         })
     };
-
-    useEffect(() => {
-         authService.findUser()
-         .then((user)=>{
-            //console.log(user);
-            goToHome(user);
-         })
-        .catch((error)=>{
-            console.log('getUser Error');
-        }); 
-         
-         
-    });
 
     const onFomeChange = (event) => {
         setFormData({
@@ -57,13 +43,27 @@ const Login = ({authService}) => {
     };
 
     const kakaoLogin= () => {
-        authService.kakao.login().then(
-            console.log
-        )
-        // authService.kakao.login()
-        // data = authService.kakao.login()
-        // console.log(data)
+        authService.kakao.login()
+        .then((user)=>{
+            goToHome(user);
+        })
     }
+
+    useEffect(() => {
+        
+        authService.findUser()
+        .then((user)=>{
+            console.log(user);
+            if(user){
+                goToHome(user);
+            }
+        })
+        .catch((error)=>{
+            console.log('getUser Error');
+        }); 
+    });
+
+   
 
 
 

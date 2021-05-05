@@ -15,7 +15,7 @@ class FindUser_View(APIView):
     permission_classes = [IsAuthenticated]
     
     def post(self, request):
-
+        print(request.auth.key)
         user = Token.objects.get(key=request.auth.key).user
 
         serializer = UserSerializer(instance=user)
