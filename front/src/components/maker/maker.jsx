@@ -1,5 +1,10 @@
 import React, { useState, useEffect  } from 'react';
 import { useHistory, useLocation } from 'react-router';
+import Footer from '../footer/footer';
+import Header from '../header/header';
+import styles from './maker.module.css';
+import Editor from '../editor/editor';
+import Preview from '../preview/preview';
 
 const Maker = ({authService}) => {
    
@@ -13,7 +18,7 @@ const Maker = ({authService}) => {
 
    
 
-    const logout = () =>{
+    const onLogout = () =>{
        authService.logout()
        .then(()=>{
            goLogin();
@@ -28,19 +33,25 @@ const Maker = ({authService}) => {
 
     
     useEffect(() => {
-        
         if(!user){
-            goLogin();
+            //goLogin();
         }
         
     });
 
 
     return (
-        <>
-            <h1>123</h1>
-            <button onClick={logout}>logout</button>
-        </>
+        <section className={styles.maker}>
+
+            <Header onLogout={onLogout} user={user}/>
+            <div className={styles.container}>
+                <Editor />
+                <Preview />
+
+
+            </div>
+            <Footer/>
+        </section>
     );
 }
    
