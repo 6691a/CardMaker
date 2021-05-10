@@ -8,7 +8,19 @@ import Preview from '../preview/preview';
 
 const Maker = ({authService}) => {
    
-
+    const [cards, setCards] = useState([
+        {
+        id:'1',
+        name:'Your Name',
+        company: 'Company',
+        theme:'light',
+        title:'your title',
+        email : 'email@gmail.com',
+        message: 'your message',
+        fileName:'fileName',
+        fileURL: null
+        }
+    ]);
     const location = useLocation();
     const history = useHistory();
     let user;
@@ -42,14 +54,15 @@ const Maker = ({authService}) => {
 
     return (
         <section className={styles.maker}>
-
             <Header onLogout={onLogout} user={user}/>
+
             <div className={styles.container}>
-                <Editor />
-                <Preview />
+                <Editor cards={cards}/>
+                <Preview cards={cards}/>
 
 
             </div>
+            
             <Footer/>
         </section>
     );

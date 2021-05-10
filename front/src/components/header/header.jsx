@@ -14,7 +14,7 @@ const Header = ({ user, onLogout }) => (
                 )}
                 {
                     user&& (
-                        <h3 className={styles.info}>{user.email}</h3>
+                        <h3 className={styles.info}>{user.username}</h3>
                     )
                 }
             </header>
