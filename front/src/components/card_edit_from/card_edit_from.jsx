@@ -23,22 +23,22 @@ const CardEditFrom = ({card, updateCard, deleteCard}) => {
     const emailRef = useRef();
     const messageRef = useRef();
 
-    const onSave = (event) => {
-        event.prevemtDefault();
-        const card = {
-            name: nameRef.current.value || '',
-            company: companyRef.current.value || '',
-            theme: themeRef.current.value,
-            title: titleRef.current.value || '',
-            email: emailRef.current.value || '',
-            message: messageRef.current.value || '',
-            fileName: '',
-            fileURL: '',
-        }
-        formRef.current.reset();
-        onSave(card);
+    // const onSave = (event) => {
+    //     event.prevemtDefault();
+    //     const card = {
+    //         name: nameRef.current.value || '',
+    //         company: companyRef.current.value || '',
+    //         theme: themeRef.current.value,
+    //         title: titleRef.current.value || '',
+    //         email: emailRef.current.value || '',
+    //         message: messageRef.current.value || '',
+    //         fileName: '',
+    //         fileURL: '',
+    //     }
+    //     formRef.current.reset();
+    //     onSave(card);
   
-    }
+    // }
     const onChange = (event) => {
         if (event.currentTarget == null) {
             return;
@@ -50,6 +50,11 @@ const CardEditFrom = ({card, updateCard, deleteCard}) => {
           });
 
     }
+
+    const onDelete = () => {
+        deleteCard(card);
+    };
+    
     return(
         <form className={styles.form} ref={formRef}>
             <input className={styles.input} ref ={nameRef} onChange={onChange} type="text" name="name" value={name} />
@@ -65,7 +70,7 @@ const CardEditFrom = ({card, updateCard, deleteCard}) => {
             <div className={styles.fileInput}>
                 <ImageInput/>
             </div>
-            <Button name='저장' onClick={onSave}/>
+            <Button name="삭제" onClick={onDelete} />
         </form>
     )
 };
