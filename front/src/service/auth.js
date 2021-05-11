@@ -24,7 +24,6 @@ class AuthService {
     }
 
     async login(formData) {
-        
         const response = await this.axios.post('login/',{
             username: formData.username,
             password: formData.password
@@ -69,28 +68,28 @@ class Kakao{
 
 
     async login() {
-        const token = await this.get_access_token()
+        // const token = await 
+        this.get_access_token()
 
         const user = await this.get_user();
 
         const data = await this.djang_login(user);
-
-
+        console.log(data)
         return data;
     }
 
     async get_access_token(){
-        let token;
+        // let token;
         await window.Kakao.Auth.login({
             scope: 'profile, account_email',
             success: (response) => {
-                token = response;
+                // token = response;
             },
             fail: (err) => {
 
             },
         })
-        return token
+        // return token
     }
 
     async get_user() {

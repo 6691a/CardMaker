@@ -50,7 +50,6 @@ const Login = ({authService}) => {
     }
 
     useEffect(() => {
-        
         authService.findUser()
         .then((user)=>{
             console.log(user);
@@ -68,22 +67,12 @@ const Login = ({authService}) => {
 
 
     return (
-        <section>
+        <section className={styles.login}>
             <Header/>
             <section>
-                <h1>Login</h1>
-                <ui>
-                    <li>
-                        <input type="text" name='username' placeholder='아이디' onChange={onFomeChange}/>
-
-                    </li>
-                    <li>
-                        <input type="password" name='password' placeholder='비밀번호' onChange={onFomeChange}/>
-                    </li>
-                    <li>
-                        <button onClick={onLogin}>로그인</button>
-                    </li>
-                    <li>
+                {/* <h1>Login</h1> */}
+                <ui className={styles.list}>
+                    <li className={styles.item}>
                         <a onClick={kakaoLogin}>
                             <img src="//k.kakaocdn.net/14/dn/btqCn0WEmI3/nijroPfbpCa4at5EIsjyf0/o.jpg" alt="" width="222"/>
                         </a>
