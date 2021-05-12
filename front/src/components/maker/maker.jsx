@@ -6,7 +6,7 @@ import styles from './maker.module.css';
 import Editor from '../editor/editor';
 import Preview from '../preview/preview';
 
-const Maker = ({authService}) => {
+const Maker = ({FileInput, authService}) => {
     const [cards, setCards] = useState({
         // id는 DB의 PK값으로 만듬
         1: {
@@ -80,7 +80,7 @@ const Maker = ({authService}) => {
             <Header onLogout={onLogout} user={user}/>
 
             <div className={styles.container}>
-                <Editor cards={cards} addCard={createOrupdateCard} updateCard={createOrupdateCard} deleteCard={deleteCard}/>
+                <Editor FileInput={FileInput} cards={cards} addCard={createOrupdateCard} updateCard={createOrupdateCard} deleteCard={deleteCard}/>
                 <Preview cards={cards}/>
 
 

@@ -5,15 +5,15 @@ import CardAddForm from '../card_add_form/card_add_form';
 
 import styles from './editor.module.css';
 
-const Editor = ({cards, addCard, updateCard, deleteCard}) => (
+const Editor = ({FileInput, cards, addCard, updateCard, deleteCard}) => (
   <section className={styles.editor}>
     <h1 className={styles.title}>Card Maker</h1>
     {
       Object.keys(cards).map(key=>(
-        <CardEditFrom key={key} card={cards[key]} updateCard={updateCard} deleteCard={deleteCard}/>
+        <CardEditFrom FileInput={FileInput} key={key} card={cards[key]} updateCard={updateCard} deleteCard={deleteCard}/>
       ))
     }
-    <CardAddForm onAdd={addCard} />
+    <CardAddForm FileInput={FileInput}onAdd={addCard} />
   </section>
 );
 
