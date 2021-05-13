@@ -1,4 +1,4 @@
-import {USER_COOKIE_NAME} from '../utility/cookies';
+
 
 class Utility {
     constructor() {
@@ -21,5 +21,6 @@ class Utility {
         return cookie? cookie[2] : null; 
     }
 }
+const utility = new Utility();
+export default utility;
 
-export default Utility

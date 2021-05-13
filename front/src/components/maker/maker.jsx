@@ -47,9 +47,12 @@ const Maker = ({FileInput, authService}) => {
 
     
     useEffect(() => {
+      
         if(!user){
             //goLogin();
         }
+      
+       
         
     });
 

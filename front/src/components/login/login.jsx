@@ -45,7 +45,10 @@ const Login = ({authService}) => {
     const kakaoLogin= () => {
         authService.kakao.login()
         .then((user)=>{
+            
             goToHome(user);
+            window.location.reload();
+
         })
     }
 

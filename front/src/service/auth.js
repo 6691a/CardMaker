@@ -1,24 +1,23 @@
 import {KAKAO_JS_KEY} from '../utility/keys'; 
 import {USER_COOKIE_NAME} from '../utility/cookies';
+import axiosInstance from '../service/axios';
+import utility from '../utility/utility';
 
 const TOKEN_DAY = 1;
 
 class AuthService {
-    constructor(axios, utility) {
- 
-        this.utility = utility;
-        this.axios = axios;
-        this.kakao = new Kakao(KAKAO_JS_KEY, this.axios, this.utility);
+    constructor() {
+        this.kakao = new Kakao(KAKAO_JS_KEY);
     }
 
     async login(formData) {
-        const response = await this.axios.post('login/',{
+        const response = await axiosInstance.post('login/',{
             username: formData.username,
             password: formData.password
         })
 
         if(response) {
-            this.utility.setCookie(USER_COOKIE_NAME, response.data.token, TOKEN_DAY)
+            utility.setCookie(USER_COOKIE_NAME, response.data.token, TOKEN_DAY)
             delete response.data.token
             return response.data
         }
@@ -29,12 +28,12 @@ class AuthService {
     }
 
     async logout() {
-        this.utility.deleteCookie(USER_COOKIE_NAME);
+        utility.deleteCookie(USER_COOKIE_NAME);
     }
 
     async findUser() {
-        if(this.utility.getCookie(USER_COOKIE_NAME)){
-            const response = await this.axios.post('/',{
+        if(utility.getCookie(USER_COOKIE_NAME)){
+            const response = await axiosInstance.post('/',{
 
             })
             return response.data 
@@ -43,9 +42,7 @@ class AuthService {
 }
 
 class Kakao{
-    constructor(key, axios, utility){
-        this.axios = axios;
-        this.utility = utility
+    constructor(key){
         this.kakaoScript = document.createElement("script");
         this.kakaoScript.src = "https://developers.kakao.com/sdk/js/kakao.js";
         document.head.appendChild(this.kakaoScript);
@@ -96,13 +93,14 @@ class Kakao{
     }
     
     async djang_login(user) {
-        const response = await this.axios.post('kakao/login/',{
+        console.log(axiosInstance)
+        const response = await axiosInstance.post('kakao/login/',{
             username: user.kakao_account.email,
             password: user.id
         })
 
         if(response) {
-            this.utility.setCookie(USER_COOKIE_NAME, response.data.token, TOKEN_DAY)
+            utility.setCookie(USER_COOKIE_NAME, response.data.token, TOKEN_DAY)
             delete response.data.token
 
             return response.data
