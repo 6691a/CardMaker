@@ -1,12 +1,12 @@
 @value makerBlack, makerWhite from '../../common/colors.css';
 
 .form {
-    display: flex;
-    width: 100%;
-    flex-wrap: wrap;
-    border-top: 1px solid makerBlack;
-    border-left: 1px solid makerBlack;
-    margin-bottom: 1em;
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+  border-top: 1px solid makerBlack;
+  border-left: 1px solid makerBlack;
+  margin-bottom: 1em;
 }
 
 .input,
@@ -29,17 +29,17 @@
 }
 
 .fileInput {
-    padding: 0;
-    flex: 1 1 50%;
+  padding: 0;
+  flex: 1 1 50%;
 }
-  
+
 .input:focus,
 .textarea:focus,
 .select:focus,
 .button:focus {
-outline: 0;
+  outline: 0;
 }
-  
+
 .textarea {
-flex-basis: 100%;
+  flex-basis: 100%;
 }
