@@ -1,26 +1,14 @@
-import axios from "axios";
-import BASE_URL from '../utility/urls';
-import Utility from '../utility/utility';
 import {KAKAO_JS_KEY} from '../utility/keys'; 
+import {USER_COOKIE_NAME} from '../utility/cookies';
 
 const TOKEN_DAY = 1;
-const USER_COOKIE_NAME = 'uTK';
-const utility = new Utility();
 
 class AuthService {
-    constructor() {
-        
-        this.axios = axios.create({
-            baseURL : BASE_URL + '/users',
-            //params: {},
-            
-            headers: {
-                Authorization: utility.getCookie(USER_COOKIE_NAME) ?
-                'Token ' + utility.getCookie(USER_COOKIE_NAME) : null
-            },
-        })
-
-        this.kakao = new Kakao(KAKAO_JS_KEY, this.axios);
+    constructor(axios, utility) {
+ 
+        this.utility = utility;
+        this.axios = axios;
+        this.kakao = new Kakao(KAKAO_JS_KEY, this.axios, this.utility);
     }
 
     async login(formData) {
@@ -30,7 +18,7 @@ class AuthService {
         })
 
         if(response) {
-            utility.setCookie(USER_COOKIE_NAME, response.data.token, TOKEN_DAY)
+            this.utility.setCookie(USER_COOKIE_NAME, response.data.token, TOKEN_DAY)
             delete response.data.token
             return response.data
         }
@@ -41,11 +29,11 @@ class AuthService {
     }
 
     async logout() {
-        utility.deleteCookie(USER_COOKIE_NAME);
+        this.utility.deleteCookie(USER_COOKIE_NAME);
     }
 
     async findUser() {
-        if(utility.getCookie(USER_COOKIE_NAME)){
+        if(this.utility.getCookie(USER_COOKIE_NAME)){
             const response = await this.axios.post('/',{
 
             })
@@ -55,15 +43,15 @@ class AuthService {
 }
 
 class Kakao{
-    constructor(key, axios){
+    constructor(key, axios, utility){
         this.axios = axios;
+        this.utility = utility
         this.kakaoScript = document.createElement("script");
         this.kakaoScript.src = "https://developers.kakao.com/sdk/js/kakao.js";
         document.head.appendChild(this.kakaoScript);
         this.kakaoScript.onload = () => {
             window.Kakao.init(key);
         }
-        
     }
 
 
@@ -114,7 +102,7 @@ class Kakao{
         })
 
         if(response) {
-            utility.setCookie(USER_COOKIE_NAME, response.data.token, TOKEN_DAY)
+            this.utility.setCookie(USER_COOKIE_NAME, response.data.token, TOKEN_DAY)
             delete response.data.token
 
             return response.data

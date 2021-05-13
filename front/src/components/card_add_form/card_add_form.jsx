@@ -29,6 +29,7 @@ const CardAddForm = ({ FileInput, onAdd }) => {
     formRef.current.reset();
     onAdd(card);
   };
+  
   return (
     <form ref={formRef} className={styles.form}>
       <input

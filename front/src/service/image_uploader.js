@@ -1,6 +1,7 @@
 class ImageUploader {
+
     async upload(file) {
-        return 'file';
+        // const resopnse = await 
     }
 }
 export default ImageUploader;

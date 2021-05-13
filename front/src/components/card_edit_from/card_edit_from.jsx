@@ -38,6 +38,14 @@ const CardEditFrom = ({FileInput, card, updateCard, deleteCard}) => {
     //     onSave(card);
   
     // }
+
+    const onFileChange = (file) => {
+        updateCard({
+            ...card,
+            fileName: file.name,
+            fileURL: file.url,
+        })
+    }
     const onChange = (event) => {
         if (event.currentTarget == null) {
             return;
@@ -67,7 +75,7 @@ const CardEditFrom = ({FileInput, card, updateCard, deleteCard}) => {
             <input className={styles.input} ref ={emailRef} onChange={onChange} type="text" name="email" value={email} />
             <textarea className={styles.textarea} ref ={messageRef} onChange={onChange} name="message" value={message}></textarea>
             <div className={styles.fileInput}>
-                <FileInput/>
+                <FileInput name={fileName} onFileChange={onFileChange}/>
             </div>
             <Button name="삭제" onClick={onDelete} />
         </form>

@@ -1,3 +1,5 @@
+import {USER_COOKIE_NAME} from '../utility/cookies';
+
 class Utility {
     constructor() {
     }
