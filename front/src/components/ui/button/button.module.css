@@ -5,11 +5,12 @@
     color: makerWhite;
     font-weight: bold;
     cursor: pointer;
-    padding: 0.5;
+    padding: 0.4em;
     flex: 1 1 50%;
     font-size: 0.8rem;
-}
-
-.button:hover {
+  }
+  
+  .button:hover {
     opacity: 0.8;
-}
+  }
+  
