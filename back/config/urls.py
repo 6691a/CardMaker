@@ -1,10 +1,16 @@
 from django.contrib import admin
 from django.urls import path, include
 
+from django.conf.urls.static import static
+from django.conf import settings
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/users/', include('users.urls',namespace='users')),
-    path('api/card/', include('card_maker.urls', namespace='card_maker')),
+    path('api/card/', include('card.urls', namespace='card')),
 
 ]
+
+#media file
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
    

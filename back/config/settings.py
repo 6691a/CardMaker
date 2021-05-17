@@ -1,5 +1,7 @@
 from pathlib import Path
 
+import os
+
 import config.secrets as KEY
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -35,7 +37,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.kakao',
 
     'users',
-    'card_maker',
+    'card',
 ]
 
 MIDDLEWARE = [
@@ -54,7 +56,7 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -142,3 +144,7 @@ KAKAO_SECRET = KEY.KAKAO['SECRET']
 CORS_ORIGIN_WHITELIST = ['http://127.0.0.1:3000' ,'http://localhost:3000']
 
 #CORS_ALLOW_CREDENTIALS = True
+
+#MEDIA FILE 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
