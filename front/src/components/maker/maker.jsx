@@ -6,7 +6,10 @@ import styles from './maker.module.css';
 import Editor from '../editor/editor';
 import Preview from '../preview/preview';
 
-const Maker = ({FileInput, authService}) => {
+const Maker = ({FileInput, authService, cardRepository}) => {
+    const location = useLocation();
+    const [user, setUser] = useState(location.state && location.state.user);
+    const history = useHistory();
     const [cards, setCards] = useState({
         // id는 DB의 PK값으로 만듬
         1: {
@@ -21,14 +24,6 @@ const Maker = ({FileInput, authService}) => {
             fileURL: null
         },
     });
-
-   
-    const location = useLocation();
-    const history = useHistory();
-    let user;
-    if (location.state){
-        user = location.state.user;
-    }
 
    
 
@@ -47,27 +42,29 @@ const Maker = ({FileInput, authService}) => {
 
     
     useEffect(() => {
-      
-        if(!user){
-            //goLogin();
-        }
-      
-       
-        
+        if(!user) {
+            goLogin();
+        }        
     });
 
-    // const addCard = (card) => {
-    //     const updated = [...cards, card];
-    //     setCards(updated);
-    // }
+    useEffect(() => {
+        if(!user) {
+            return
+        }
+        cardRepository.getCards(user.username, (cards)=> {
+            setCards(cards);
+        });
+    }, [user]);
+
+
 
     const createOrupdateCard = (card) => {
-       
         setCards(cards => {
             const updated = {...cards};
             updated[card.id] = card;
             return updated;
         });
+        cardRepository.saveCard(user.username, card)
     }
 
     const deleteCard = (card) => {

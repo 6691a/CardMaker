@@ -4,7 +4,7 @@ import styles from './app.module.css';
 import Login from './components/login/login';
 import Maker from './components/maker/maker';
 
-function App( {FileInput, authService} ) {
+function App( {FileInput, authService, cardRepository} ) {
   const [cards,setCards] = useState([]);
   const [name, setName] = useState();
 
@@ -15,9 +15,8 @@ function App( {FileInput, authService} ) {
           <Route exact path="/">
             <Login authService={authService}/>
           </Route>
-
           <Route path="/maker">
-            <Maker FileInput={FileInput} authService={authService}/>
+            <Maker FileInput={FileInput} authService={authService} cardRepository={cardRepository}/>
           </Route>
           
         </Switch>

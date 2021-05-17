@@ -53,8 +53,7 @@ class Kakao{
 
 
     async login() {
-        // const token = await 
-        this.get_access_token()
+        const token = await this.get_access_token()
 
         const user = await this.get_user();
 
