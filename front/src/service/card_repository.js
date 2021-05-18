@@ -1,10 +1,18 @@
+import axiosInstance from "./axios";
 
 
 class CardRepository {
-    getCards(useranme, callback){
-        // const cards = '';
-        // cards  && callback(cars);
+    async getCards(useranme, callback){
+        const response = await axiosInstance.get('card/')
+
+        const data = response.data;
+        const cards = {};
+        for (let i = 0; i < data.length; i++) {
+            cards[data[i].id] = data[i];
+        }
+        cards && callback(cards);
     }
+
     saveCard(username, card) {
 
     }

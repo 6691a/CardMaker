@@ -58,7 +58,8 @@ const CardEditFrom = ({FileInput, card, updateCard, deleteCard}) => {
 
     }
 
-    const onDelete = () => {
+    const onDelete = (event) => {
+        event.preventDefault();
         deleteCard(card);
     };
     

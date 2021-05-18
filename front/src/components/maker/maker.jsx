@@ -10,22 +10,8 @@ const Maker = ({FileInput, authService, cardRepository}) => {
     const location = useLocation();
     const [user, setUser] = useState(location.state && location.state.user);
     const history = useHistory();
-    const [cards, setCards] = useState({
-        // id는 DB의 PK값으로 만듬
-        1: {
-            id:'1',
-            name:'Your Name',
-            company: 'Company',
-            theme:'Light',
-            title:'your title',
-            email : 'email@gmail.com',
-            message: 'your message',
-            fileName:'fileName',
-            fileURL: null
-        },
-    });
+    const [cards, setCards] = useState({});
 
-   
 
     const onLogout = () =>{
        authService.logout()
@@ -51,25 +37,35 @@ const Maker = ({FileInput, authService, cardRepository}) => {
         if(!user) {
             return
         }
-        cardRepository.getCards(user.username, (cards)=> {
-            setCards(cards);
+        cardRepository.getCards(user.username, (card)=> {
+            setCards(card);
         });
     }, [user]);
 
 
 
     const createOrupdateCard = (card) => {
+       
         setCards(cards => {
             const updated = {...cards};
             updated[card.id] = card;
+            // console.log(cards)
             return updated;
         });
         cardRepository.saveCard(user.username, card)
     }
 
     const deleteCard = (card) => {
+          
         setCards(cards => {
             const updated = { ...cards };
+            console.log(updated[0])
+            console.log(updated[1])
+
+            console.log(updated[2])
+            console.log(card.id)
+             console.log(updated[card.id])
+
             delete updated[card.id];
             return updated;
         });

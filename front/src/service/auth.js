@@ -11,7 +11,7 @@ class AuthService {
     }
 
     async login(formData) {
-        const response = await axiosInstance.post('login/',{
+        const response = await axiosInstance.post('users/login/',{
             username: formData.username,
             password: formData.password
         })
@@ -33,7 +33,7 @@ class AuthService {
 
     async findUser() {
         if(utility.getCookie(USER_COOKIE_NAME)){
-            const response = await axiosInstance.post('/',{
+            const response = await axiosInstance.post('users/',{
 
             })
             return response.data 
@@ -93,7 +93,7 @@ class Kakao{
     
     async djang_login(user) {
         console.log(axiosInstance)
-        const response = await axiosInstance.post('kakao/login/',{
+        const response = await axiosInstance.post('users/kakao/login/',{
             username: user.kakao_account.email,
             password: user.id
         })
