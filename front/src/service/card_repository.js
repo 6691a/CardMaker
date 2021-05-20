@@ -2,7 +2,7 @@ import axiosInstance from "./axios";
 
 
 class CardRepository {
-    async getCards(useranme, callback){
+    async getCards(callback){
         const response = await axiosInstance.get('card/')
 
         const data = response.data;
@@ -13,12 +13,16 @@ class CardRepository {
         cards && callback(cards);
     }
 
-    saveCard(username, card) {
+    async saveCard(username, card) {
 
     }
 
-    removeCard(username, card) {
-
+    async deleteCard(cards) {
+        const response = await axiosInstance.delete('card/delete/',{
+            data: { // 서버에서 req.body.{} 로 확인할 수 있다.
+                id:cards
+            }
+        })
     }
 }
 export default CardRepository;

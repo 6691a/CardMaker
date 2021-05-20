@@ -37,7 +37,7 @@ const Maker = ({FileInput, authService, cardRepository}) => {
         if(!user) {
             return
         }
-        cardRepository.getCards(user.username, (card)=> {
+        cardRepository.getCards((card)=> {
             setCards(card);
         });
     }, [user]);
@@ -52,23 +52,18 @@ const Maker = ({FileInput, authService, cardRepository}) => {
             // console.log(cards)
             return updated;
         });
-        cardRepository.saveCard(user.username, card)
+        cardRepository.saveCard(card)
     }
 
     const deleteCard = (card) => {
           
         setCards(cards => {
             const updated = { ...cards };
-            console.log(updated[0])
-            console.log(updated[1])
-
-            console.log(updated[2])
-            console.log(card.id)
-             console.log(updated[card.id])
 
             delete updated[card.id];
             return updated;
         });
+        cardRepository.deleteCard(card.id)
     }
 
     return (
