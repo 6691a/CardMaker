@@ -16,7 +16,7 @@ const CardAddForm = ({ FileInput, onAdd }) => {
     console.log(event);
     event.preventDefault();
     const card = {
-      id: Date.now(), //uuid
+      // id: Date.now(), //uuid
       name: nameRef.current.value || '',
       company: companyRef.current.value || '',
       theme: themeRef.current.value,
@@ -24,7 +24,7 @@ const CardAddForm = ({ FileInput, onAdd }) => {
       email: emailRef.current.value || '',
       message: messageRef.current.value || '',
       fileName: '',
-      fileURL: '',
+      fileURL: null,
     };
     formRef.current.reset();
     onAdd(card);

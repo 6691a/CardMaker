@@ -45,14 +45,15 @@ const Maker = ({FileInput, authService, cardRepository}) => {
 
 
     const createOrupdateCard = (card) => {
-       
-        setCards(cards => {
-            const updated = {...cards};
-            updated[card.id] = card;
-            // console.log(cards)
-            return updated;
+    
+        cardRepository.saveCard(card,(card)=> {
+            setCards(cards => {
+                const updated = {...cards};
+                updated[card.id] = card;
+              
+                return updated;
+           });
         });
-        cardRepository.saveCard(card)
     }
 
     const deleteCard = (card) => {

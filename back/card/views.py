@@ -28,11 +28,26 @@ class Card_View(APIView):
         author = getAuthor(request)
         card = request.data.get('card')
 
-        # if card is None:
-        # serializer = CardSerializer(data=request.data)
-        # if serializer.is_valid():
-        #     print(serializer)
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+  
+      
+        if card is None:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        card['author'] = author.pk
+
+
+        serializer = CardSerializer(data=card)
+       
+        if serializer.is_valid():
+            serializer.save()
+            print(serializer.data)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+     
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+
+        
+        
 
 
 
