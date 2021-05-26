@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.authtoken.models import Token
@@ -32,7 +32,6 @@ class Card_View(APIView):
       
         if card is None:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-
         card['author'] = author.pk
 
 
@@ -49,10 +48,24 @@ class Card_View(APIView):
         
         
 
+class Card_Update_View(APIView):
+    permission_classes = [IsAuthenticated]
+    def put(self, request):
+        data = request.data.get('card')
+        author = getAuthor(request)
+  
+        
+        card = get_object_or_404(Card, pk=data.get('id'))
+
+        serializer = CardSerializer(card, data=data)
+        if serializer.is_valid():
+            # print(serializer.data)
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-   
-# class Card_Update_View(APIView):
 
 class Card_Delete_View(APIView):
     permission_classes = [IsAuthenticated]
