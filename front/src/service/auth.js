@@ -29,6 +29,7 @@ class AuthService {
 
     async logout() {
         utility.deleteCookie(USER_COOKIE_NAME);
+        Kakao.Auth.logout();
     }
 
     async findUser() {
@@ -53,9 +54,8 @@ class Kakao{
 
 
     async login() {
-        const token = await this.get_access_token()
-
-        const user = await this.get_user();
+        
+        const user = await this.get_access_token();
 
         const data = await this.djang_login(user);
         console.log(data)
@@ -63,17 +63,17 @@ class Kakao{
     }
 
     async get_access_token(){
-        // let token;
+        let user;
         await window.Kakao.Auth.login({
             scope: 'profile, account_email',
             success: (response) => {
-                // token = response;
+                user = this.get_user();
             },
             fail: (err) => {
 
             },
         })
-        // return token
+        return user;
     }
 
     async get_user() {
@@ -92,7 +92,6 @@ class Kakao{
     }
     
     async djang_login(user) {
-        console.log(axiosInstance)
         const response = await axiosInstance.post('users/kakao/login/',{
             username: user.kakao_account.email,
             password: user.id

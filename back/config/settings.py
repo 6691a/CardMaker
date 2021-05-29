@@ -2,7 +2,7 @@ from pathlib import Path
 
 import os
 
-import config.secrets as KEY
+# import config.secrets as KEY
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -102,8 +102,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
-# https://docs.djangoproject.com/en/3.2/topics/i18n/
+
 
 LANGUAGE_CODE = 'ko-kr'
 
@@ -116,13 +115,9 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -137,9 +132,9 @@ SITE_ID = 1
 
 
 #API KEYS
-KAKAO_REST_KEY = KEY.KAKAO['REST_KEY']
+# KAKAO_REST_KEY = KEY.KAKAO['REST_KEY']
 
-KAKAO_SECRET = KEY.KAKAO['SECRET']
+# KAKAO_SECRET = KEY.KAKAO['SECRET']
 
 CORS_ORIGIN_WHITELIST = ['http://127.0.0.1:3000' ,'http://localhost:3000']
 
