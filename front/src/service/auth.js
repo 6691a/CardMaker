@@ -29,7 +29,7 @@ class AuthService {
 
     async logout() {
         utility.deleteCookie(USER_COOKIE_NAME);
-        Kakao.Auth.logout();
+        window.Kakao.Auth.logout();
     }
 
     async findUser() {
@@ -55,43 +55,44 @@ class Kakao{
 
     async login() {
         
-        const user = await this.get_access_token();
+        return this.get_access_token()
+        .then((res)=>{
+            return this.djang_login(res);
+        });
 
-        const data = await this.djang_login(user);
-        console.log(data)
-        return data;
+        // const data = await this.djang_login(user);
+
+        // return data;
     }
 
-    async get_access_token(){
-        let user;
-        await window.Kakao.Auth.login({
-            scope: 'profile, account_email',
-            success: (response) => {
-                user = this.get_user();
-            },
-            fail: (err) => {
+    get_access_token(){
 
-            },
-        })
-        return user;
+        return new Promise((resolve, reject) => {
+            window.Kakao.Auth.login({
+                scope: 'profile, account_email', 
+                success(){
+                    resolve(
+                        window.Kakao.API.request({
+                        url: '/v2/user/me',
+                        success : function(response){
+
+                        },
+                        fail (err) {
+                            alert(JSON.stringify(err))
+                        },
+                    }))
+
+                },
+            fail(error) {
+                    reject(error);
+                },
+            });
+        });     
     }
 
-    async get_user() {
-        let user;
-        await window.Kakao.API.request({
-            url: '/v2/user/me',
-            success: function(response) {
-                user = response;
-            },
-            fail: (err) => {
-                alert(JSON.stringify(err))
-            },
-
-        })
-        return user
-    }
     
     async djang_login(user) {
+        // console.log(user)
         const response = await axiosInstance.post('users/kakao/login/',{
             username: user.kakao_account.email,
             password: user.id
