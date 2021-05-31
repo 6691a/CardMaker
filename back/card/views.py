@@ -14,7 +14,7 @@ class Card_View(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-      
+
         author = getAuthor(request)
 
         serializer = CardSerializer(Card.objects.filter(author=author), many=True)
@@ -27,6 +27,7 @@ class Card_View(APIView):
     def post(self, request):
         author = getAuthor(request)
         card = request.data.get('card')
+
 
   
       
@@ -83,5 +84,12 @@ class Card_Delete_View(APIView):
       
         return Response(status=status.HTTP_200_OK)
 
+class Card_Image_Upload_View(APIView):
+    permission_classes = [IsAuthenticated]
 
+    def post(self, request):
+        print(request.data)
+        return Response(status=status.HTTP_200_OK)
+ 
+        
 
