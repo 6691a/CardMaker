@@ -5,3 +5,7 @@ class CardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Card
         fields = '__all__'
+
+class ImageSerializer(serializers.Serializer):
+    name = serializers.CharField()
+    url = serializers.ImageField() 
