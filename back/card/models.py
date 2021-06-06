@@ -22,10 +22,10 @@ class Card(models.Model):
     company = models.CharField(max_length=255, blank=True, null=True)
     theme = models.CharField(max_length=10, choices=THEME_CHOICES, default=THEME_CHOICES[0][0])
     title = models.CharField(max_length=255, blank=True, null=True)
-    email = models.EmailField(blank=True, null=True)
+    email = models.CharField(max_length=30, blank=True, null=True)
     message = models.CharField(max_length=255, blank=True, null=True)
-    # fileName = models.CharField(max_length=255, blank=True, null=True)
     fileURL = models.ImageField(upload_to=upload_to, blank=True, null=True)
+    fileName = models.CharField(max_length=25, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     updated = models.DateTimeField(auto_now=True, blank=True, null=True)
 

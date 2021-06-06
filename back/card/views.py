@@ -6,7 +6,6 @@ from rest_framework.response import Response
 from rest_framework import serializers, status
 from .models import Card
 from .serializer import CardSerializer, ImageSerializer
-import json
 
 def getAuthor(request):
     return Token.objects.get(key=request.auth.key).user
@@ -22,12 +21,16 @@ class Card_View(APIView):
 
         if serializer:
             return Response(serializer.data ,status=status.HTTP_200_OK)
+
+        print(serializer.errors)
+
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
     def post(self, request):
         author = getAuthor(request)
         card = request.data.get('card')
-
+        print(type(request.data))
+        
         if card is None:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         card['author'] = author.pk
@@ -35,25 +38,29 @@ class Card_View(APIView):
         serializer = CardSerializer(data=card)
         if serializer.is_valid():
             serializer.save()
-            print(serializer.data)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-
+        print(serializer.errors)
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request):
         print(request.data)
+        
         data = request.data.get('card')
+        print( data.pop('fileURL'))
+
+
         author = getAuthor(request)
         
         card = get_object_or_404(Card, pk=data.get('id'))
 
         serializer = CardSerializer(card, data=data)
         if serializer.is_valid():
-            # print(serializer.data)
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
 
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+        print(serializer.errors)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request):
         author = getAuthor(request)
@@ -78,17 +85,20 @@ class Card_Image_Upload_View(APIView):
         file = request.data.get('file')
         card = get_object_or_404(Card, pk=data)
         card.fileURL = file
+        card.fileName = file.name
         card.save()
 
-        data = {
+        ser_data = {
             "url" : card.fileURL,
-            "name" : file.name
+            "name" : card.fileName
         }
-        serializer = ImageSerializer(data=data)
+
+        serializer = ImageSerializer(data=ser_data)
         if serializer.is_valid():
             return Response(serializer.data, status=status.HTTP_200_OK)
-            
+        
+        # print(serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
- 
+
         
 
