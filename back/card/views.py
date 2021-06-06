@@ -22,14 +22,14 @@ class Card_View(APIView):
         if serializer:
             return Response(serializer.data ,status=status.HTTP_200_OK)
 
-        print(serializer.errors)
 
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
     def post(self, request):
         author = getAuthor(request)
         card = request.data.get('card')
-        print(type(request.data))
+        print(card)
+        # card.pop('fileURL')
         
         if card is None:
             return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -46,7 +46,7 @@ class Card_View(APIView):
         print(request.data)
         
         data = request.data.get('card')
-        print( data.pop('fileURL'))
+        data.pop('fileURL')
 
 
         author = getAuthor(request)
@@ -78,9 +78,8 @@ class Card_View(APIView):
 
 class Card_Image_Upload_View(APIView):
     permission_classes = [IsAuthenticated]
-
+    
     def post(self, request):
-        print(request.data)
         data = request.data.get('card')
         file = request.data.get('file')
         card = get_object_or_404(Card, pk=data)

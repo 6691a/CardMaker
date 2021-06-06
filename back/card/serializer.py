@@ -2,7 +2,7 @@ from rest_framework import serializers
 from .models import Card
 
 class CardSerializer(serializers.ModelSerializer):
-    # fileURL = serializers.ImageField(required=False, write_only = True)
+    fileURL = serializers.ImageField(required=False)
     class Meta:
         model = Card
         fields = ['id','author','name','company','theme','title','email','message','fileURL','fileName']
@@ -12,3 +12,9 @@ class CardSerializer(serializers.ModelSerializer):
 class ImageSerializer(serializers.Serializer):
     name = serializers.CharField()
     url = serializers.ImageField() 
+
+
+class ImageCardCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Card
+        fields = ['id','author','name','company','theme','title','email','message','fileURL','fileName']
